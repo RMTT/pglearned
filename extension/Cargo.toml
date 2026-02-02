@@ -1,0 +1,44 @@
+[package]
+name = "pgl"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+name = "pgrx_embed_pgl"
+path = "./src/bin/pgrx_embed.rs"
+
+[features]
+default = ["pg18"]
+pg18 = ["pgrx/pg18", "pgrx-tests/pg18" ]
+pg_test = []
+
+[dependencies]
+anyhow = "1.0.100"
+pgrx = "=0.17.0"
+phf = { version = "0.13.1", features = ["macros", "phf_macros"] }
+serde_json = "1.0.149"
+tonic = "*"
+tonic-prost = "*"
+prost = "0.14"
+tokio = { version = "1", features = ["sync", "rt-multi-thread", "macros"] }
+
+[build-dependencies]
+tonic-prost-build = "*"
+
+[dev-dependencies]
+pgrx-tests = "=0.17.0"
+
+[lints.rust]
+unexpected_cfgs = "allow"
+
+[profile.dev]
+panic = "unwind"
+
+[profile.release]
+panic = "unwind"
+opt-level = 3
+lto = "fat"
+codegen-units = 1

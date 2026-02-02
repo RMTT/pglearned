@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pgl_rpc;
+
+service PglRemote {
+  rpc ChoosePlan (ChoosePlanRequest) returns (ChoosePlanResponse);
+}
+
+message ChoosePlanRequest {
+  repeated string plans = 1;
+}
+
+message ChoosePlanResponse {
+  int32 chosen_plan_index = 1;
+}

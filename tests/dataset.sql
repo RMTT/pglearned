@@ -1,0 +1,10 @@
+SELECT * FROM imdb_test;
+SELECT * FROM imdb_test WHERE year = 1994;
+SELECT title, rating FROM imdb_test WHERE genre = 'Action';
+SELECT * FROM imdb_test WHERE rating > 9.0;
+SELECT genre, COUNT(*) FROM imdb_test GROUP BY genre;
+SELECT genre, AVG(rating) FROM imdb_test GROUP BY genre HAVING AVG(rating) > 8.8;
+SELECT * FROM imdb_test WHERE title LIKE 'The %';
+SELECT * FROM imdb_test ORDER BY year DESC LIMIT 5;
+SELECT * FROM imdb_test WHERE year > 2000 AND genre = 'Action';
+SELECT id, title FROM imdb_test WHERE rating BETWEEN 8.8 AND 9.0;
