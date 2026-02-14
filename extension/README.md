@@ -58,7 +58,7 @@ select plan from pgl_qdataset_collect('imdb', -1, 10, 'brute', -1);
 
 ### Collection Methods
 *   `default`: Uses PostgreSQL's `standard_planner`.
-*   `brute`: Modifies session-level GUCs (`enable_hashjoin`, `enable_mergejoin`, etc.) to force different plan shapes. When arm is -1, pgl_qdataset_collect will run all possible arms.
+*   `brute`: Modifies session-level GUCs (`enable_hashjoin`, `enable_mergejoin`, etc.) to force different plan shapes. Possible arms: -1 ~ 63. When arm is -1, pgl_qdataset_collect will run all possible arms.
 
 ## Replace components
 
@@ -78,7 +78,6 @@ pglearned intercepts the PostgreSQL planner hook. You can control its behavior u
 
 *   `pgl.planner_arm` (`integer`):
     *   Used when `method = 'brute'` and `mode = 'local'`.
-    *   Selects a specific configuration bitmask (0-63) controlling 6 scan/join enable flags.
 
 *   `pgl.remote_server_url` (`string`):
     *   The endpoint of the gRPC server for `remote` mode (e.g., `http://127.0.0.1:50051`).
