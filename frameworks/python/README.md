@@ -34,9 +34,9 @@ for query_id, plan_data in client.qdataset_collect("training_set"):
     # plan_data is a dictionary containing the JSON plan representation
 ```
 
-### 2. Custom Planner Adapter
+### 2. Custom Adapter
 
-To implement custom query planning logic (e.g., a machine learning model that selects the best plan), create a class that inherits from `PglAdapter` and serve it using `run_server`.
+To implement custom query processing logic (e.g., a machine learning model that selects the best plan), create a class that inherits from `PglAdapter` and serve it using `run_server`.
 
 ```python
 from typing import List, Dict, Any
