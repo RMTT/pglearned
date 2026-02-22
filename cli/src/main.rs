@@ -61,11 +61,14 @@ enum QDatasetCommands {
         /// Output file path
         #[arg(long)]
         out: String,
+        /// Method to use for collection
+        #[arg(long, default_value = "default")]
+        method: String,
     },
 }
 
 fn main() -> anyhow::Result<()> {
-    env_logger::init();
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     let cli = Cli::parse();
 
     let db_url = cli
@@ -119,12 +122,13 @@ fn main() -> anyhow::Result<()> {
                     name,
                     r#continue,
                     out,
+                    method,
                 } => {
                     let mut offset: i64 = if r#continue { -1 } else { 0 };
                     let limit: i64 = 20;
                     let mut all_results = Vec::new();
 
-                    info!("Running dataset '{}'...", name);
+                    info!("Running dataset '{}' with method '{}'...", name, method);
                     if r#continue {
                         info!("Continuing from last position.");
                     } else {
@@ -133,8 +137,8 @@ fn main() -> anyhow::Result<()> {
 
                     loop {
                         let rows = client.query(
-                            "SELECT plan FROM pgl_qdataset_collect($1, $2, $3)",
-                            &[&name, &offset, &limit],
+                            "SELECT plan FROM pgl_qdataset_collect($1, $2, $3, $4)",
+                            &[&name, &offset, &limit, &method],
                         )?;
 
                         let batch_size = rows.len();
@@ -144,7 +148,11 @@ fn main() -> anyhow::Result<()> {
 
                         for row in rows {
                             let plan: serde_json::Value = row.get("plan");
-                            all_results.push(plan);
+                            if let serde_json::Value::Array(arr) = plan {
+                                all_results.extend(arr);
+                            } else {
+                                all_results.push(plan);
+                            }
                         }
 
                         if batch_size < limit as usize {
