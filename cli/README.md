@@ -104,7 +104,7 @@ Continue from where it left off:
 pgl qdataset run my_dataset --out plans_part2.json --continue
 ```
 
-Run using a specific method (e.g., 'exhaustive'):
+Run using a specific method (e.g., 'brute'):
 ```bash
-pgl qdataset run my_dataset --out plans.json --method exhaustive
+pgl qdataset run my_dataset --out plans.json --method brute
 ```
