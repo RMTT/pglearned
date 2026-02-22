@@ -1,8 +1,6 @@
 use pgrx::prelude::*;
 
-use std::ffi::CString;
-
-use pgrx::{GucContext, GucFlags, GucRegistry, GucSetting};
+use pgrx::{GucContext, GucFlags, GucRegistry};
 
 mod datasets;
 mod explain;
