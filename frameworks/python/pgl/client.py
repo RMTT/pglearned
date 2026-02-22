@@ -35,9 +35,13 @@ class PglClient:
         """
         # Connect to the database
         with psycopg.connect(self.dburl) as conn:
+            conn.autocommit = True
             with conn.cursor() as cur:
-                # Execute the UDF
-                # The UDF signature is: pgl_qdataset_collect(dataset_name text, offset int8, limit int8, method text, arm int4)
+                # Check and install extension if needed
+                cur.execute("SELECT 1 FROM pg_extension WHERE extname = 'pgl'")
+                if not cur.fetchone():
+                    cur.execute("CREATE EXTENSION IF NOT EXISTS pglearned")
+
                 cur.execute(
                     "SELECT id, plan FROM pgl_qdataset_collect(%s, %s, %s, %s, %s)",
                     (dataset_name, offset, limit, method, arm),
