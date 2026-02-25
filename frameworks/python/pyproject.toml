@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pgl"
+name = "pglearned"
 version = "0.1.0"
 description = "Python bindings for pglearned extension"
 requires-python = ">=3.7"
