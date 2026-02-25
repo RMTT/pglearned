@@ -87,11 +87,17 @@ pub unsafe fn pgl_brute_planner(
 
                 candidate_stmts.push(planned_stmt);
 
-                plans.push(planned_stmt_to_json(
-                    planned_stmt,
-                    query_string,
-                    bound_params,
-                ));
+                let mut json_str = planned_stmt_to_json(planned_stmt, query_string, bound_params);
+
+                if let Ok(json_val) = serde_json::from_str::<serde_json::Value>(&json_str) {
+                    if let Some(arr) = json_val.as_array() {
+                        if let Some(first) = arr.first() {
+                            json_str = first.to_string();
+                        }
+                    }
+                }
+
+                plans.push(json_str);
             }
 
             let url = if let Some(url_cstr) = PGL_REMOTE_SERVER_URL.get() {
