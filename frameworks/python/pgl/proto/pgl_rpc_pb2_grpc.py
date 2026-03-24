@@ -39,12 +39,23 @@ class PglRemoteStub(object):
                 request_serializer=pgl__rpc__pb2.ChoosePlanRequest.SerializeToString,
                 response_deserializer=pgl__rpc__pb2.ChoosePlanResponse.FromString,
                 _registered_method=True)
+        self.CardinalityEstimate = channel.unary_unary(
+                '/pgl_rpc.PglRemote/CardinalityEstimate',
+                request_serializer=pgl__rpc__pb2.CardinalityEstimateRequest.SerializeToString,
+                response_deserializer=pgl__rpc__pb2.CardinalityEstimateResponse.FromString,
+                _registered_method=True)
 
 
 class PglRemoteServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def ChoosePlan(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CardinalityEstimate(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -57,6 +68,11 @@ def add_PglRemoteServicer_to_server(servicer, server):
                     servicer.ChoosePlan,
                     request_deserializer=pgl__rpc__pb2.ChoosePlanRequest.FromString,
                     response_serializer=pgl__rpc__pb2.ChoosePlanResponse.SerializeToString,
+            ),
+            'CardinalityEstimate': grpc.unary_unary_rpc_method_handler(
+                    servicer.CardinalityEstimate,
+                    request_deserializer=pgl__rpc__pb2.CardinalityEstimateRequest.FromString,
+                    response_serializer=pgl__rpc__pb2.CardinalityEstimateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -86,6 +102,33 @@ class PglRemote(object):
             '/pgl_rpc.PglRemote/ChoosePlan',
             pgl__rpc__pb2.ChoosePlanRequest.SerializeToString,
             pgl__rpc__pb2.ChoosePlanResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CardinalityEstimate(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/pgl_rpc.PglRemote/CardinalityEstimate',
+            pgl__rpc__pb2.CardinalityEstimateRequest.SerializeToString,
+            pgl__rpc__pb2.CardinalityEstimateResponse.FromString,
             options,
             channel_credentials,
             insecure,

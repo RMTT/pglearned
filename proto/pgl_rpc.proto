@@ -4,6 +4,7 @@ package pgl_rpc;
 
 service PglRemote {
   rpc ChoosePlan (ChoosePlanRequest) returns (ChoosePlanResponse);
+  rpc CardinalityEstimate (CardinalityEstimateRequest) returns (CardinalityEstimateResponse);
 }
 
 message ChoosePlanRequest {
@@ -12,4 +13,12 @@ message ChoosePlanRequest {
 
 message ChoosePlanResponse {
   int32 chosen_plan_index = 1;
+}
+
+message CardinalityEstimateRequest {
+  repeated string rel_opts = 1;
+}
+
+message CardinalityEstimateResponse {
+  repeated int64 cardinality_estimates = 1;
 }

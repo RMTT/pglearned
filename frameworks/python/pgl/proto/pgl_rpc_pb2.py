@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpgl_rpc.proto\x12\x07pgl_rpc\"\"\n\x11\x43hoosePlanRequest\x12\r\n\x05plans\x18\x01 \x03(\t\"/\n\x12\x43hoosePlanResponse\x12\x19\n\x11\x63hosen_plan_index\x18\x01 \x01(\x05\x32R\n\tPglRemote\x12\x45\n\nChoosePlan\x12\x1a.pgl_rpc.ChoosePlanRequest\x1a\x1b.pgl_rpc.ChoosePlanResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rpgl_rpc.proto\x12\x07pgl_rpc\"\"\n\x11\x43hoosePlanRequest\x12\r\n\x05plans\x18\x01 \x03(\t\"/\n\x12\x43hoosePlanResponse\x12\x19\n\x11\x63hosen_plan_index\x18\x01 \x01(\x05\".\n\x1a\x43\x61rdinalityEstimateRequest\x12\x10\n\x08rel_opts\x18\x01 \x03(\t\"<\n\x1b\x43\x61rdinalityEstimateResponse\x12\x1d\n\x15\x63\x61rdinality_estimates\x18\x01 \x03(\x03\x32\xb4\x01\n\tPglRemote\x12\x45\n\nChoosePlan\x12\x1a.pgl_rpc.ChoosePlanRequest\x1a\x1b.pgl_rpc.ChoosePlanResponse\x12`\n\x13\x43\x61rdinalityEstimate\x12#.pgl_rpc.CardinalityEstimateRequest\x1a$.pgl_rpc.CardinalityEstimateResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,6 +35,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CHOOSEPLANREQUEST']._serialized_end=60
   _globals['_CHOOSEPLANRESPONSE']._serialized_start=62
   _globals['_CHOOSEPLANRESPONSE']._serialized_end=109
-  _globals['_PGLREMOTE']._serialized_start=111
-  _globals['_PGLREMOTE']._serialized_end=193
+  _globals['_CARDINALITYESTIMATEREQUEST']._serialized_start=111
+  _globals['_CARDINALITYESTIMATEREQUEST']._serialized_end=157
+  _globals['_CARDINALITYESTIMATERESPONSE']._serialized_start=159
+  _globals['_CARDINALITYESTIMATERESPONSE']._serialized_end=219
+  _globals['_PGLREMOTE']._serialized_start=222
+  _globals['_PGLREMOTE']._serialized_end=402
 # @@protoc_insertion_point(module_scope)

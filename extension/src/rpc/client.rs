@@ -24,4 +24,8 @@ impl PglRemoteSyncClient {
         let response = self.runtime.block_on(self.client.choose_plan(request))?;
         Ok(response.into_inner().chosen_plan_index)
     }
+
+    pub fn cardinality_estimate(&mut self, rel_opts: Vec<String>) -> anyhow::Result<Vec<i64>> {
+        todo!()
+    }
 }

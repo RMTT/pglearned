@@ -2,14 +2,14 @@ use pgrx::prelude::*;
 
 use pgrx::{GucContext, GucFlags, GucRegistry};
 
+mod cardinality;
 mod datasets;
 mod explain;
 mod planner;
-mod utils;
 mod rpc;
+mod utils;
 
 pg_module_magic!(name, version);
-
 
 extension_sql!(
     "CREATE SCHEMA IF NOT EXISTS pgl;
@@ -47,7 +47,7 @@ pub extern "C-unwind" fn _PG_init() {
         c"pgl.remote_server_url",
         c"The remote server url",
         c"The remote server url for pglearned",
-        &planner::PGL_REMOTE_SERVER_URL,
+        &rpc::PGL_REMOTE_SERVER_URL,
         GucContext::Userset,
         GucFlags::default(),
     );
@@ -64,5 +64,6 @@ pub extern "C-unwind" fn _PG_init() {
     unsafe {
         explain::register();
         planner::register();
+        cardinality::register();
     }
 }

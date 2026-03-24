@@ -52,6 +52,20 @@ class PglRemoteAdapter(pgl_rpc_pb2_grpc.PglRemoteServicer):
 
         return pgl_rpc_pb2.ChoosePlanResponse(chosen_plan_index=chosen_index)
 
+    def CardinalityEstimate(self, request, context):
+        try:
+            cardinality_estimates = self.adapter.cardinality_estimate(
+                list(request.rel_opts)
+            )
+        except Exception as e:
+            logger.exception("Error in user adapter logic")
+            context.abort(grpc.StatusCode.INTERNAL, f"Adapter error: {str(e)}")
+            return
+
+        return pgl_rpc_pb2.CardinalityEstimateResponse(
+            cardinality_estimates=cardinality_estimates
+        )
+
 
 def run_server(
     adapter: PglAdapter, host: str = "0.0.0.0", port: int = 50051, max_workers: int = 10

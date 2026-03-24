@@ -19,3 +19,16 @@ class PglAdapter(ABC):
             The index of the chosen plan (0-based).
         """
         pass
+
+    @abstractmethod
+    def cardinality_estimate(self, rel_opts: List[str]) -> List[int]:
+        """
+        Estimate relation cardinalities from relation option payloads.
+
+        Args:
+            rel_opts: A list of relation option payloads.
+
+        Returns:
+            A list of estimated cardinalities.
+        """
+        pass

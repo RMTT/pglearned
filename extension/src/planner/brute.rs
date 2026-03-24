@@ -1,5 +1,6 @@
 use super::types::{PglPlannerMode, BRUTE_POSSIBLE_ARMS};
-use super::{PGL_PLANNER_ARM, PGL_PLANNER_MODE, PGL_REMOTE_SERVER_URL};
+use super::{PGL_PLANNER_ARM, PGL_PLANNER_MODE};
+use crate::rpc::PGL_REMOTE_SERVER_URL;
 use crate::utils::set_config_local;
 use pgrx::pg_sys;
 use std::ffi::CStr;

@@ -6,7 +6,6 @@ mod types;
 use pgrx::pg_sys;
 use pgrx::prelude::*;
 use pgrx::GucSetting;
-use std::ffi::CString;
 
 use self::brute::pgl_brute_planner;
 use self::default::pgl_default_planner;
@@ -19,8 +18,6 @@ static mut PREV_PLANNER_HOOK: pg_sys::planner_hook_type = None;
 pub static PGL_PLANNER_METHOD: GucSetting<PglPlannerMethod> =
     GucSetting::<PglPlannerMethod>::new(PglPlannerMethod::Default);
 pub static PGL_PLANNER_ARM: GucSetting<i32> = GucSetting::<i32>::new(-1);
-pub static PGL_REMOTE_SERVER_URL: GucSetting<Option<CString>> =
-    GucSetting::<Option<CString>>::new(None);
 pub static PGL_PLANNER_MODE: GucSetting<PglPlannerMode> =
     GucSetting::<PglPlannerMode>::new(PglPlannerMode::Local);
 
@@ -33,17 +30,17 @@ pub extern "C-unwind" fn pgl_planner(
 ) -> *mut pg_sys::PlannedStmt {
     unsafe {
         if let Some(prev) = PREV_PLANNER_HOOK {
-            prev(parse, query_string, cursor_options, bound_params)
-        } else {
-            let method = PGL_PLANNER_METHOD.get();
+            prev(parse, query_string, cursor_options, bound_params);
+        }
 
-            match method {
-                PglPlannerMethod::Default => {
-                    pgl_default_planner(parse, query_string, cursor_options, bound_params)
-                }
-                PglPlannerMethod::Brute => {
-                    pgl_brute_planner(parse, query_string, cursor_options, bound_params)
-                }
+        let method = PGL_PLANNER_METHOD.get();
+
+        match method {
+            PglPlannerMethod::Default => {
+                pgl_default_planner(parse, query_string, cursor_options, bound_params)
+            }
+            PglPlannerMethod::Brute => {
+                pgl_brute_planner(parse, query_string, cursor_options, bound_params)
             }
         }
     }
