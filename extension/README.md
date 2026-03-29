@@ -82,7 +82,10 @@ pglearned intercepts the PostgreSQL planner hook. You can control its behavior u
 *   `pgl.remote_server_url` (`string`):
     *   The endpoint of the gRPC server for `remote` mode (e.g., `http://127.0.0.1:50051`).
 
-#### Remote Inference Mode
+*   `pgl.enable_remote_cardinality` (`boolean`):
+    *   When `on`, `pglearned` sends base-relation and join payloads to `CardinalityEstimate` and updates the relation row estimates exposed through the planner hooks.
+
+#### Remote Planner Choosing
 
 To use an external ML model for plan selection:
 
@@ -97,3 +100,16 @@ To use an external ML model for plan selection:
     *   Generate plans.
     *   Send them to the remote server.
     *   Execute the plan chosen by the server.
+
+#### Remote Cardinality Estimation
+
+To override PostgreSQL row estimates from a remote service:
+
+1. Start a `PglRemote` gRPC server that implements `CardinalityEstimate`.
+2. Configure Postgres:
+   ```sql
+   SET pgl.remote_server_url = 'http://127.0.0.1:50051';
+   SET pgl.enable_remote_cardinality = on;
+   ```
+3. Run `EXPLAIN` on a filtered query or join query.
+4. Compare the reported `rows=` values with the hook disabled to confirm the remote estimator is active.

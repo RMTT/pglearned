@@ -15,6 +15,19 @@ from .adapter import PglAdapter
 logger = logging.getLogger(__name__)
 
 
+def validate_cardinality_estimates(cardinality_estimates, expected_len):
+    if len(cardinality_estimates) != expected_len:
+        raise ValueError(
+            f"expected {expected_len} estimates, got {len(cardinality_estimates)}"
+        )
+
+    normalized = []
+    for estimate in cardinality_estimates:
+        normalized.append(int(estimate))
+
+    return normalized
+
+
 class PglRemoteAdapter(pgl_rpc_pb2_grpc.PglRemoteServicer):
     """
     Internal gRPC servicer that adapts the PglAdapter to the PglRemote service.
@@ -54,8 +67,9 @@ class PglRemoteAdapter(pgl_rpc_pb2_grpc.PglRemoteServicer):
 
     def CardinalityEstimate(self, request, context):
         try:
-            cardinality_estimates = self.adapter.cardinality_estimate(
-                list(request.rel_opts)
+            cardinality_estimates = validate_cardinality_estimates(
+                self.adapter.cardinality_estimate(list(request.rel_opts)),
+                len(request.rel_opts),
             )
         except Exception as e:
             logger.exception("Error in user adapter logic")

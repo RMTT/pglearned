@@ -1,5 +1,5 @@
 use pgrx::pg_sys;
-use std::ffi::CString;
+use std::ffi::{CStr, CString};
 
 /// Sets a GUC configuration option using the PostgreSQL C API.
 ///
@@ -46,4 +46,29 @@ pub fn set_config(name: &str, value: &str) -> anyhow::Result<()> {
 
 pub fn set_config_local(name: &str, value: &str) -> anyhow::Result<()> {
     set_config_internal(name, value, pg_sys::GucAction::GUC_ACTION_LOCAL)
+}
+
+/// Extracts all members from a PostgreSQL Bitmapset.
+pub unsafe fn bitmapset_members(relids: pg_sys::Relids) -> Vec<u32> {
+    let mut members = Vec::new();
+    let mut current = -1;
+
+    while !relids.is_null() {
+        current = pg_sys::bms_next_member(relids, current);
+        if current < 0 {
+            break;
+        }
+        members.push(current as u32);
+    }
+
+    members
+}
+
+/// Safely converts a C string pointer to an owned Rust String.
+pub unsafe fn cstr_to_string(ptr: *mut std::os::raw::c_char) -> Option<String> {
+    if ptr.is_null() {
+        return None;
+    }
+
+    Some(CStr::from_ptr(ptr).to_string_lossy().into_owned())
 }

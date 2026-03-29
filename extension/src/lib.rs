@@ -52,6 +52,15 @@ pub extern "C-unwind" fn _PG_init() {
         GucFlags::default(),
     );
 
+    GucRegistry::define_bool_guc(
+        c"pgl.enable_remote_cardinality",
+        c"Enable remote cardinality estimation",
+        c"Use a remote estimator to override relation row estimates",
+        &cardinality::PGL_ENABLE_REMOTE_CARDINALITY,
+        GucContext::Userset,
+        GucFlags::default(),
+    );
+
     GucRegistry::define_enum_guc(
         c"pgl.planner_mode",
         c"The planner mode",

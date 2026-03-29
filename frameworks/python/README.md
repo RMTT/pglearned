@@ -36,7 +36,7 @@ for query_id, plan_data in client.qdataset_collect("training_set"):
 
 ### 2. Custom Adapter
 
-To implement custom query processing logic (e.g., a machine learning model that selects the best plan), create a class that inherits from `PglAdapter` and serve it using `run_server`.
+To implement custom query processing logic (e.g., a machine learning model that selects the best plan or overrides cardinality estimates), create a class that inherits from `PglAdapter` and serve it using `run_server`.
 
 ```python
 from typing import List, Dict, Any
@@ -65,6 +65,14 @@ class MySmartAdapter(PglAdapter):
             # ...
             
         return best_index
+
+    def cardinality_estimate(self, rel_opts):
+        estimates = []
+        for rel_opt in rel_opts:
+            payload = json.loads(rel_opt)
+            estimates.append(int(payload["rows"]))
+        return estimates
+
 
 if __name__ == "__main__":
     # Initialize your adapter

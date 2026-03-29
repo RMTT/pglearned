@@ -7,6 +7,10 @@ This Project contains following parts:
 + @cli is a cli tool to help user interact with pgrx extension.
 + @frameworks are libraries for interacting with postgresql extension.
 
+## Dev environment tips
+
++ call `nix develop ..` to use the dev environment
+
 ## Code style
 
 ### rust

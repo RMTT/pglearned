@@ -2,7 +2,8 @@ pub mod pgl_rpc {
     tonic::include_proto!("pgl_rpc");
 }
 
-use pgl_rpc::{pgl_remote_client::PglRemoteClient, ChoosePlanRequest};
+use anyhow::{bail, ensure};
+use pgl_rpc::{pgl_remote_client::PglRemoteClient, CardinalityEstimateRequest, ChoosePlanRequest};
 use tonic::transport::Channel;
 
 pub struct PglRemoteSyncClient {
@@ -26,6 +27,23 @@ impl PglRemoteSyncClient {
     }
 
     pub fn cardinality_estimate(&mut self, rel_opts: Vec<String>) -> anyhow::Result<Vec<i64>> {
-        todo!()
+        let expected_len = rel_opts.len();
+        let request = CardinalityEstimateRequest { rel_opts };
+        let response = self
+            .runtime
+            .block_on(self.client.cardinality_estimate(request))?;
+        let estimates = response.into_inner().cardinality_estimates;
+
+        ensure!(
+            estimates.len() == expected_len,
+            "expected {expected_len} estimates, got {}",
+            estimates.len()
+        );
+
+        if estimates.iter().any(|estimate| *estimate < 0) {
+            bail!("cardinality estimates must be non-negative");
+        }
+
+        Ok(estimates)
     }
 }
