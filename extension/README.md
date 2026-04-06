@@ -113,3 +113,12 @@ To override PostgreSQL row estimates from a remote service:
    ```
 3. Run `EXPLAIN` on a filtered query or join query.
 4. Compare the reported `rows=` values with the hook disabled to confirm the remote estimator is active.
+
+
+Current payload transition notes:
+
+- cardinality payloads now include legacy fields and versioned structured fields together
+- `payload_version = 1` identifies the structured payload contract
+- unknown payload versions should fall back to PostgreSQL `rows`
+- unsupported payloads should surface stable `unsupported_reasons` codes and fall back to PostgreSQL `rows`
+- legacy fields remain present during the transition so existing generic adapters can ignore the new structured fields

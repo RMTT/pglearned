@@ -65,7 +65,7 @@ extern "C-unwind" fn pgl_set_rel_pathlist(
             prev(root, rel, rti, rte);
         }
 
-        let estimate = extract::base_relation_payload(rel, rte)
+        let estimate = extract::base_relation_payload(root, rel, rte)
             .as_ref()
             .and_then(|payload| request_estimate(&remote_url, payload));
 
@@ -102,7 +102,7 @@ extern "C-unwind" fn pgl_set_join_pathlist(
             prev(root, joinrel, outerrel, innerrel, jointype, extra);
         }
 
-        let estimate = extract::join_relation_payload(root, joinrel, extra)
+        let estimate = extract::join_relation_payload(root, joinrel, jointype, extra)
             .as_ref()
             .and_then(|payload| request_estimate(&remote_url, payload));
 

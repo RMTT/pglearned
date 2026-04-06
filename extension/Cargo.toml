@@ -37,6 +37,7 @@ unexpected_cfgs = "allow"
 
 [profile.dev]
 panic = "unwind"
+debug = true
 
 [profile.release]
 panic = "unwind"
